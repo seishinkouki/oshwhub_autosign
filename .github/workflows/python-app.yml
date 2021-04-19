@@ -3,7 +3,7 @@ name: 立创oshwhub自动签到
 on:
     workflow_dispatch:
     schedule:
-        - cron: "0 */2 * * *"
+        - cron: "0 * * * *"
     watch:
         types: [started]
 

@@ -2,6 +2,7 @@ import json
 import re
 import os
 import requests
+import hashlib
 
 
 def cookies2dict(_cookies):
@@ -133,7 +134,7 @@ form_data = {
     "showCheckCodeVal": "false",
     "pwdSource": "",
     "username": os.environ['phone'],
-    "password": os.environ['passwd'],
+    "password": hashlib.md5(os.environ['passwd']).hexdigest(),
     "rememberPwd": "yes",
 }
 passport_res = requests.post(url=login_url, data=form_data, headers=login_headers, cookies=login_cookies,

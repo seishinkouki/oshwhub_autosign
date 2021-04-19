@@ -131,8 +131,8 @@ form_data = {
     "loginFromType": "shop",
     "showCheckCodeVal": "false",
     "pwdSource": "",
-    "username": "15302667980",
-    "password": "e2a5cec218b7200f7390d0804747fd69",
+    "username": os.environ['phone'],
+    "password": os.environ['passwd'],,
     "rememberPwd": "yes",
 }
 passport_res = requests.post(url=login_url, data=form_data, headers=login_headers, cookies=login_cookies,

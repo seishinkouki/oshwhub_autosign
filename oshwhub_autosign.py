@@ -132,7 +132,7 @@ form_data = {
     "showCheckCodeVal": "false",
     "pwdSource": "",
     "username": os.environ['phone'],
-    "password": os.environ['passwd'],,
+    "password": os.environ['passwd'],
     "rememberPwd": "yes",
 }
 passport_res = requests.post(url=login_url, data=form_data, headers=login_headers, cookies=login_cookies,

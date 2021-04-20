@@ -1,9 +1,9 @@
 # oshwhub_autosign
 利用github action实现立创 oshwhub社区自动登录+自动签到
 
-<div align="center"> 
+
 <img src="https://github.com/seishinkouki/oshwhub_autosign/actions/workflows/python-app.yml/badge.svg?branch=main">
-</div>
+
 
 # 使用方式
 1. 右上角fork本仓库

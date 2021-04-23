@@ -26,5 +26,4 @@ jobs:
             - name: "运行 立创oshwhub自动签到"
               run: python3 ./oshwhub_autosign.py
               env:
-                  phone: ${{ secrets.phone }}
-                  passwd: ${{ secrets.passwd }}
+                  oshw: ${{ secrets.oshw }}

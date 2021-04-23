@@ -264,7 +264,7 @@ class Oshwhub:
 
 if __name__ == '__main__':
     try:
-        users = json.loads(os.environ['OSHW'])
+        users = json.loads(os.environ['oshw'])
     except json.decoder.JSONDecodeError:
         print("用户名密码解析失败, 请检查secret OSHW 的格式")
     else:

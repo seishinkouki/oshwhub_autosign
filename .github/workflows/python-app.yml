@@ -3,7 +3,7 @@ name: 立创oshwhub自动签到
 on:
     workflow_dispatch:
     schedule:
-        - cron: "10 16,17,18 * * *"
+        - cron: "1 16,17,18 * * *"
     watch:
         types: [started]
 
@@ -26,5 +26,4 @@ jobs:
             - name: "运行 立创oshwhub自动签到"
               run: python3 ./oshwhub_autosign.py
               env:
-                  phone: ${{ secrets.phone }}
-                  passwd: ${{ secrets.passwd }}
+                  oshw: ${{ secrets.oshw }}

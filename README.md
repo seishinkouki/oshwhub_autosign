@@ -4,8 +4,9 @@
 
 <img src="https://github.com/seishinkouki/oshwhub_autosign/actions/workflows/python-app.yml/badge.svg?branch=main">
 
+# 建议还是部署在自己本地的树莓派或者装了python的op路由器之类的上面哈, action不太稳的样子
 
-# 使用方式
+# 以下是action食用方式
 1. 右上角fork本仓库
 2. 点击Settings -> Secrets -> 点击绿色按钮 (如无绿色按钮说明已激活。直接到第三步。)
 3. 新增 一个secret, Name 为`OSHW`, value为如下json样式:

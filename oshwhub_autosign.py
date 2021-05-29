@@ -257,7 +257,7 @@ class Oshwhub:
         oshw_res = requests.post(self.url_sevenDay, data=coupon_data, headers=oshw_headers, cookies=oshw_cookies)
         # print("七天奖励结果:", json.loads(oshw_res.content))
         if not json.loads(oshw_res.content)['code']:
-            self.seven_reward_Statistics = "七天奖励领取成功, 奖品为: " + coupon_name
+            self.seven_reward_Statistics = "七天奖励领取成功, 奖品为: " + json.loads(oshw_res.content)['result']['info']
         else:
             self.seven_reward_Statistics = "七天奖励领取结果: " + json.loads(oshw_res.content)['message']
 

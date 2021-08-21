@@ -4,7 +4,7 @@
 
 <img src="https://github.com/seishinkouki/oshwhub_autosign/actions/workflows/python-app.yml/badge.svg?branch=main">
 
-# action体验不佳, 不再直接直接action, 请自行fork修改 
+# action体验不佳, 不再直接支持action, 请自行fork修改 
 # ~~建议还是部署在自己本地的树莓派或者装了python的op路由器之类的上面哈, action不太稳的样子~~
 
 ~~以下是action食用方式~~

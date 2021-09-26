@@ -103,6 +103,7 @@ class Oshwhub:
         # _CASAuth = _oshw_cookies['CASAuth']
 
         oshw_headers = {
+            "X-Forwarded-For": "8.8.8.8",
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -125,6 +126,7 @@ class Oshwhub:
         logger.info('开始获取CASAuth...')
 
         passport_headers = {
+            "X-Forwarded-For": "8.8.8.8",
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -144,6 +146,7 @@ class Oshwhub:
         # print("PASSPORT网域下acw_tc:", passport_cookies['acw_tc'])
 
         passport_headers2 = {
+            "X-Forwarded-For": "8.8.8.8",
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -170,6 +173,7 @@ class Oshwhub:
         logger.info('开始获取登录表单里lt参数...')
 
         login_headers = {
+            "X-Forwarded-For": "8.8.8.8",
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -222,6 +226,7 @@ class Oshwhub:
 
         # 验证ticket
         oshw_headers = {
+            "X-Forwarded-For": "8.8.8.8",
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -283,22 +288,6 @@ class Oshwhub:
                 self.sign_Statistics = "已签到过,取消签到"
                 self.sign_flag = 0
 
-        for tag in soup.find_all("div", attrs={'class': "three-day"}):
-            if tag.attrs['data-status'] == "0":
-                self.three_reward_Statistics = "天数不够,取消领取"
-                self.three_reward_flag = 0
-            elif tag.attrs['data-status'] == "2":
-                self.three_reward_Statistics = "已领取过,取消领取"
-                self.three_reward_flag = 0
-
-        for tag in soup.find_all("div", attrs={'class': "seven-day"}):
-            if tag.attrs['data-status'] == "0":
-                self.seven_reward_Statistics = "天数不够,取消领取"
-                self.seven_reward_flag = 0
-            elif tag.attrs['data-status'] == "2":
-                self.seven_reward_Statistics = "已领取过,取消领取"
-                self.seven_reward_flag = 0
-
         # oshw_cookies = cookies2dict(oshw_res.headers['Set-Cookie'])
         if self.sign_flag:
             oshw_sign = requests.post(self.url_signIn, headers=oshw_headers, cookies=oshw_cookies)
@@ -309,6 +298,18 @@ class Oshwhub:
                 self.sign_Statistics = "签到成功"
             else:
                 self.sign_Statistics = json.loads(oshw_sign.content)['message']
+
+        # 签到后刷新页面
+        soup = BeautifulSoup(
+            requests.get("https://oshwhub.com/sign_in", headers=oshw_headers, cookies=oshw_cookies).text, "html.parser")
+        # 三天奖励状态
+        for tag in soup.find_all("div", attrs={'class': "three-day"}):
+            if tag.attrs['data-status'] == "0":
+                self.three_reward_Statistics = "天数不够,取消领取"
+                self.three_reward_flag = 0
+            elif tag.attrs['data-status'] == "2":
+                self.three_reward_Statistics = "已领取过,取消领取"
+                self.three_reward_flag = 0
 
         if self.three_reward_flag:
             # 获取三天签到奖励
@@ -321,6 +322,16 @@ class Oshwhub:
             else:
                 # self.three_reward_Statistics = "三天奖励领取结果: " + json.loads(oshw_res.content)['message']
                 self.three_reward_Statistics = json.loads(oshw_res.content)['message']
+
+        # 七天奖励状态
+        for tag in soup.find_all("div", attrs={'class': "seven-day"}):
+            if tag.attrs['data-status'] == "0":
+                self.seven_reward_Statistics = "天数不够,取消领取"
+                self.seven_reward_flag = 0
+            elif tag.attrs['data-status'] == "2":
+                self.seven_reward_Statistics = "已领取过,取消领取"
+                self.seven_reward_flag = 0
+
         if self.seven_reward_flag:
             # 获取七日奖品信息
             oshw_res = requests.get(self.url_giftInfo, headers=oshw_headers, cookies=oshw_cookies)

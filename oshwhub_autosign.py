@@ -375,7 +375,7 @@ agentid = 00000000  # 企业微信应用的id
 # Telegram 推送
 worker_url = "v"
 bot_token = ""
-tg_uid = 0
+tg_uid = 1
 
 def construct_api_link():
     return "https://" + worker_url + "/bot" + bot_token + "/"
@@ -435,3 +435,6 @@ def main_handler(event,context):
             else:
                 print('未发生新任务,不进行推送')
     print('==程序执行结束==')
+
+if __name__ == '__main__':
+    main_handler()

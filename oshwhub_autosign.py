@@ -7,7 +7,6 @@ import requests
 import hashlib
 import os
 from bs4 import BeautifulSoup
-from loguru import logger
 
 
 def cookies2dict(_cookies):
@@ -95,7 +94,7 @@ class Oshwhub:
         # 后面需要用到acw_tc oshwhub_session oshwhubReferer
         _oshw_cookies = cookies2dict(oshw_res.headers['Set-Cookie'])
         # print("未登录状态oshw网域的cookies:", _oshw_cookies)
-        logger.info('开始获取未登录状态oshw cookies...')
+        print('开始获取未登录状态oshw cookies...')
         # print(str(_oshw_cookies).replace("'", "").split(",")[4][17:])
         _acw_tc = _oshw_cookies['acw_tc'].split(";")[0]
         _oshwhub_session = str(_oshw_cookies).replace("'", "").split(",")[1][17:]
@@ -123,7 +122,7 @@ class Oshwhub:
         login_res = requests.get(self.url_oshw2passport, headers=oshw_headers, allow_redirects=False)
         oshw2passport_cookies = cookies2dict(login_res.headers['Set-Cookie'])
         # print("跳转到PASSPORT过程中获取CASAuth:", oshw2passport_cookies['CASAuth'])
-        logger.info('开始获取CASAuth...')
+        print('开始获取CASAuth...')
 
         passport_headers = {
             "X-Forwarded-For": "8.8.8.8",
@@ -166,11 +165,11 @@ class Oshwhub:
         passport_res = requests.get(passport_res.headers['Location'], headers=passport_headers2)
         SESSION = passport_res.headers['Set-Cookie'].split(";")[-4].split("=")[-1]
         # print("获取新SESSION:", SESSION)
-        logger.info('开始获取新SESSION...')
+        print('开始获取新SESSION...')
 
         LT = re.findall(r'<input type="hidden" name="lt" value="(.*?)" />', passport_res.text)
         # print("获取登录表单里lt参数:", LT[0])
-        logger.info('开始获取登录表单里lt参数...')
+        print('开始获取登录表单里lt参数...')
 
         login_headers = {
             "X-Forwarded-For": "8.8.8.8",
@@ -213,7 +212,7 @@ class Oshwhub:
             "password": hashlib.md5(self.passwd.encode('utf-8')).hexdigest(),
             "rememberPwd": "yes",
         }
-        logger.info('开始登陆...')
+        print('开始登陆...')
         try:
             passport_res = requests.post(self.url_login, data=form_data, headers=login_headers, cookies=login_cookies,
                                          allow_redirects=False)
@@ -255,7 +254,7 @@ class Oshwhub:
 
         # print(oshw_cookies)
         # 验证ticket
-        logger.info('开始验证ticket...')
+        print('开始验证ticket...')
         try:
             oshw_res = requests.get(passport_res.headers['Location'], headers=oshw_headers, cookies=oshw_cookies,
                                     allow_redirects=False)
@@ -264,7 +263,7 @@ class Oshwhub:
             return
         # print(oshw_res.headers['Location'])
         # 更新session
-        logger.info('更新SESSION...')
+        print('更新SESSION...')
         oshw_res = requests.get(oshw_res.headers['Location'], headers=oshw_headers, cookies=oshw_cookies,
                                 allow_redirects=False)
         oshw_cookies['oshwhub_session'] = cookies2dict(oshw_res.headers['Set-Cookie'])['oshwhub_session']
@@ -358,7 +357,7 @@ class Oshwhub:
 url_pushplus = "http://pushplus.hxtrip.com/send"
 
 # 需修改部分
-OSHW = '{"1300000": "123"}'
+OSHW = '{"": ""}'
 
 # 推送加 推送
 # pushplus token
@@ -372,25 +371,38 @@ coolpush_token = ""
 corpid = 'wwxxxx'  # 微信企业ID
 corpsecret = 'abcdef'  # 企业微信应用的Secret
 agentid = 00000000  # 企业微信应用的id
+
+# Telegram 推送
+worker_url = "v"
+bot_token = ""
+tg_uid = 0
+
+def construct_api_link():
+    return "https://" + worker_url + "/bot" + bot_token + "/"
+
+def tg_send_message(msg,uid):
+    api = construct_api_link()+"sendMessage?chat_id={uid}&text={msg}"
+    resp = requests.get(api.format(uid=uid,msg=msg))
+    return resp.text
 # ####
 
-if __name__ == '__main__':
+def main_handler(event,context):
     try:
         users = json.loads(OSHW)
     except json.decoder.JSONDecodeError:
-        logger.error('用户名密码解析失败, 请检查secret OSHW 的格式')
+        print('用户名密码解析失败, 请检查secret OSHW 的格式')
     else:
-        logger.info("需签到用户数量: " + str(len(users)))
+        print("需签到用户数量: " + str(len(users)))
         for key in users:
-            logger.info("开始用户" + key[:3] + "*******" + key[-2:] + "的签到...")
+            print("开始用户" + key[:3] + "*******" + key[-2:] + "的签到...")
             my_user = Oshwhub(key, users[key])
             my_user.auto_sign()
             if '错误' in my_user.sign_Statistics:
-                logger.error(my_user.sign_Statistics)
+                print(my_user.sign_Statistics)
             else:
-                logger.info(my_user.sign_Statistics)
-            logger.info(my_user.three_reward_Statistics)
-            logger.info(my_user.seven_reward_Statistics)
+                print(my_user.sign_Statistics)
+            print(my_user.three_reward_Statistics)
+            print(my_user.seven_reward_Statistics)
             Statistics_data = {
                 "签到结果": my_user.sign_Statistics,
                 "三天奖励结果": my_user.three_reward_Statistics,
@@ -403,21 +415,23 @@ if __name__ == '__main__':
                 "template": "json"
             }
 
-            coolpush_payload = key[:3] + "*******" + key[-2:] + "\r\n" + \
+            coolpush_payload = "用户：" + key[:3] + "*******" + key[-2:] + "\r\n" + \
                                "签到结果: " + my_user.sign_Statistics + "\r\n" + \
                                "三天奖励结果: " + my_user.three_reward_Statistics + "\r\n" + \
                                "七天奖励结果: " + my_user.seven_reward_Statistics
 
             if my_user.sign_flag or my_user.three_reward_flag or my_user.seven_reward_flag:
                 if len(pushplus_token) == 32:
-                    logger.info('推送结果: ' + coolpush(coolpush_token, coolpush_payload.encode('UTF-8')))
+                    print('推送结果: ' + coolpush(coolpush_token, coolpush_payload.encode('UTF-8')))
                 elif len(coolpush_token) == 32:
-                    logger.info('推送结果: ' + json.loads(requests.post(url_pushplus, data=push_payload).content)['data'])
+                    print('推送结果: ' + json.loads(requests.post(url_pushplus, data=push_payload).content)['data'])
                 elif agentid != 0:
-                    logger.info(
+                    print(
                         '推送结果: ' + json.loads(weixinpush(corpid, corpsecret, agentid, coolpush_payload))['errmsg'])
+                elif len(bot_token) != 0:
+                    print('推送结果: ' + tg_send_message(msg=coolpush_payload,uid=tg_uid))
                 else:
-                    logger.warning('未设置推送类型')
+                    print('未设置推送类型')
             else:
-                logger.info('未发生新任务,不进行推送')
-    logger.info('==程序执行结束==')
+                print('未发生新任务,不进行推送')
+    print('==程序执行结束==')

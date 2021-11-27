@@ -2,8 +2,6 @@
 ~~利用github action实现~~立创 oshwhub社区自动登录+自动签到+自动领取三天及七天签到奖励脚本, 支持多用户签到
 
 
-<img src="https://github.com/seishinkouki/oshwhub_autosign/actions/workflows/python-app.yml/badge.svg?branch=main">
-
 # action体验不佳, 不再直接支持action, 请自行fork修改 
 # ~~建议还是部署在自己本地的树莓派或者装了python的op路由器之类的上面哈, action不太稳的样子~~
 

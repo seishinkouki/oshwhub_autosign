@@ -409,9 +409,9 @@ if __name__ == '__main__':
                                "七天奖励结果: " + my_user.seven_reward_Statistics
 
             if my_user.sign_flag or my_user.three_reward_flag or my_user.seven_reward_flag:
-                if len(pushplus_token) == 32:
+                if len(coolpush_token) == 32:
                     logger.info('推送结果: ' + coolpush(coolpush_token, coolpush_payload.encode('UTF-8')))
-                elif len(coolpush_token) == 32:
+                elif len(pushplus_token) == 32:
                     logger.info('推送结果: ' + json.loads(requests.post(url_pushplus, data=push_payload).content)['data'])
                 elif agentid != 0:
                     logger.info(

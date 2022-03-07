@@ -9,6 +9,10 @@ import os
 from bs4 import BeautifulSoup
 
 
+def get_ip():
+    ip = requests.get("https://api.ip.sb/ip")
+    return ip.text.strip()
+
 def cookies2dict(_cookies):
     _cookieDict = {}
     _cookies = _cookies.split("; ")
@@ -102,7 +106,7 @@ class Oshwhub:
         # _CASAuth = _oshw_cookies['CASAuth']
 
         oshw_headers = {
-            "X-Forwarded-For": "8.8.8.8",
+            "X-Forwarded-For": get_ip(),
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -125,7 +129,7 @@ class Oshwhub:
         print('开始获取CASAuth...')
 
         passport_headers = {
-            "X-Forwarded-For": "8.8.8.8",
+            "X-Forwarded-For": get_ip(),
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -145,7 +149,7 @@ class Oshwhub:
         # print("PASSPORT网域下acw_tc:", passport_cookies['acw_tc'])
 
         passport_headers2 = {
-            "X-Forwarded-For": "8.8.8.8",
+            "X-Forwarded-For": get_ip(),
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -172,7 +176,7 @@ class Oshwhub:
         print('开始获取登录表单里lt参数...')
 
         login_headers = {
-            "X-Forwarded-For": "8.8.8.8",
+            "X-Forwarded-For": get_ip(),
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -225,7 +229,7 @@ class Oshwhub:
 
         # 验证ticket
         oshw_headers = {
-            "X-Forwarded-For": "8.8.8.8",
+            "X-Forwarded-For": get_ip(),
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -437,4 +441,4 @@ def main_handler(event,context):
     print('==程序执行结束==')
 
 if __name__ == '__main__':
-    main_handler()
+    main_handler(None, None)

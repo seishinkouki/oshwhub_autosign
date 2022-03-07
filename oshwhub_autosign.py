@@ -84,6 +84,7 @@ class Oshwhub:
     url_threeDay = "https://oshwhub.com/api/user/sign_in/getTreeDayGift"
     url_sevenDay = "https://oshwhub.com/api/user/sign_in/getSevenDayGift"
     url_giftInfo = "https://oshwhub.com/api/user/sign_in/getUnbrokenGiftInfo"
+    url_getIP = "http://ip.03k.org"
 
     def __init__(self, phone, passwd):
         self.phone = phone
@@ -91,6 +92,7 @@ class Oshwhub:
 
     def auto_sign(self):
         oshw_res = requests.get(self.url_oshw)
+        local_ip = requests.get(self.url_getIP)
 
         # 后面需要用到acw_tc oshwhub_session oshwhubReferer
         _oshw_cookies = cookies2dict(oshw_res.headers['Set-Cookie'])
@@ -103,7 +105,7 @@ class Oshwhub:
         # _CASAuth = _oshw_cookies['CASAuth']
 
         oshw_headers = {
-            "X-Forwarded-For": "8.8.8.8",
+            "X-Forwarded-For": local_ip.text,
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -126,7 +128,7 @@ class Oshwhub:
         logger.info('开始获取CASAuth...')
 
         passport_headers = {
-            "X-Forwarded-For": "8.8.8.8",
+            "X-Forwarded-For": local_ip.text,
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -146,7 +148,7 @@ class Oshwhub:
         # print("PASSPORT网域下acw_tc:", passport_cookies['acw_tc'])
 
         passport_headers2 = {
-            "X-Forwarded-For": "8.8.8.8",
+            "X-Forwarded-For": local_ip.text,
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -173,7 +175,7 @@ class Oshwhub:
         logger.info('开始获取登录表单里lt参数...')
 
         login_headers = {
-            "X-Forwarded-For": "8.8.8.8",
+            "X-Forwarded-For": local_ip.text,
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -226,7 +228,7 @@ class Oshwhub:
 
         # 验证ticket
         oshw_headers = {
-            "X-Forwarded-For": "8.8.8.8",
+            "X-Forwarded-For": local_ip.text,
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",

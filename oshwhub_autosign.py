@@ -355,7 +355,7 @@ class Oshwhub:
                 self.seven_reward_Statistics = json.loads(oshw_res.content)['message']
 
 
-url_pushplus = "http://pushplus.hxtrip.com/send"
+url_pushplus = "http://www.pushplus.plus/send"
 
 # 需修改部分
 OSHW = '{"1300000": "123"}'
@@ -402,7 +402,6 @@ if __name__ == '__main__':
                 "content": str(Statistics_data),
                 "template": "json"
             }
-
             coolpush_payload = key[:3] + "*******" + key[-2:] + "\r\n" + \
                                "签到结果: " + my_user.sign_Statistics + "\r\n" + \
                                "三天奖励结果: " + my_user.three_reward_Statistics + "\r\n" + \
@@ -412,7 +411,11 @@ if __name__ == '__main__':
                 if len(coolpush_token) == 32:
                     logger.info('推送结果: ' + coolpush(coolpush_token, coolpush_payload.encode('UTF-8')))
                 elif len(pushplus_token) == 32:
-                    logger.info('推送结果: ' + json.loads(requests.post(url_pushplus, data=push_payload).content)['data'])
+                    # pushplus 的请求方式需要把信息json.dumps一下
+                    body = json.dumps(push_payload).encode(encoding='utf-8')
+                    headers = {'Content-Type': 'application/json'}
+                    # 推送结果返回改为msg，data目前只会返回流水号。
+                    logger.info('推送结果: ' + json.loads(requests.post(url_pushplus, data=body,headers=headers).content)['msg'])
                 elif agentid != 0:
                     logger.info(
                         '推送结果: ' + json.loads(weixinpush(corpid, corpsecret, agentid, coolpush_payload))['errmsg'])

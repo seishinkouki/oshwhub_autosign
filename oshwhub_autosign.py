@@ -98,8 +98,8 @@ class Oshwhub:
         logger.info('开始获取未登录状态oshw cookies...')
         # print(str(_oshw_cookies).replace("'", "").split(",")[4][17:])
         _acw_tc = _oshw_cookies['acw_tc'].split(";")[0]
-        _oshwhub_session = str(_oshw_cookies).replace("'", "").split(",")[1][17:]
-        _oshwhubReferer = str(_oshw_cookies).replace("'", "").split(",")[4][17:]
+        # _oshwhub_session = str(_oshw_cookies).replace("'", "").split(",")[1][17:]
+        # _oshwhubReferer = str(_oshw_cookies).replace("'", "").split(",")[4][17:]
         # _CASAuth = _oshw_cookies['CASAuth']
 
         oshw_headers = {
@@ -244,8 +244,8 @@ class Oshwhub:
         }
         oshw_cookies = {
             "acw_tc": _acw_tc,
-            "oshwhubReferer": _oshwhubReferer,
-            "oshwhub_session": _oshwhub_session,
+            # "oshwhubReferer": "_oshwhubReferer",
+            # "oshwhub_session": "_oshwhub_session",
             "CASAuth": oshw2passport_cookies['CASAuth']
         }
         # print(oshw_cookies['acw_tc'])

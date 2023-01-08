@@ -103,7 +103,7 @@ class Oshwhub:
         # _CASAuth = _oshw_cookies['CASAuth']
 
         oshw_headers = {
-            "X-Forwarded-For": "8.8.8.8",
+            # "X-Forwarded/-For": "8.8.8.8",
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -126,7 +126,7 @@ class Oshwhub:
         logger.info('开始获取CASAuth...')
 
         passport_headers = {
-            "X-Forwarded-For": "8.8.8.8",
+            #"X-Forwarded-For": "8.8.8.8",
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -146,7 +146,7 @@ class Oshwhub:
         # print("PASSPORT网域下acw_tc:", passport_cookies['acw_tc'])
 
         passport_headers2 = {
-            "X-Forwarded-For": "8.8.8.8",
+            #"X-Forwarded-For": "8.8.8.8",
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -173,7 +173,7 @@ class Oshwhub:
         logger.info('开始获取登录表单里lt参数...')
 
         login_headers = {
-            "X-Forwarded-For": "8.8.8.8",
+            #"X-Forwarded-For": "8.8.8.8",
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
@@ -226,7 +226,7 @@ class Oshwhub:
 
         # 验证ticket
         oshw_headers = {
-            "X-Forwarded-For": "8.8.8.8",
+            #"X-Forwarded-For": "8.8.8.8",
             "Accept": self.cookies_Accept,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
